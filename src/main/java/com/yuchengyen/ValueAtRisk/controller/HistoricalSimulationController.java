@@ -1,35 +1,26 @@
 package com.yuchengyen.ValueAtRisk.controller;
 
-import yahoofinance.Stock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
+import com.yuchengyen.ValueAtRisk.entity.RequestHis;
+import com.yuchengyen.ValueAtRisk.service.HistoricalSimulationService;
 
-public class HistoricalSimulationController extends RiskMeasure {
-    @Override
-    public double getVar() {
-        double Confidence = Double.parseDouble(hashParam.get("Confidence"));
-        double TimeHorizon = Math.sqrt(Integer.parseInt(hashParam.get("TimeHorizonDays")));
+@RestController
+@RequestMapping(value = "/HistoricalSimulation", produces = MediaType.APPLICATION_JSON_VALUE)
+public class HistoricalSimulationController {
 
-        //ArrayList<Double> tomorrowPortfolio = new ArrayList<>(Collections.nCopies(size, 0.0));
-        double[] tomorrowPortfolio = new double[size];
+	@Autowired
+	private HistoricalSimulationService historicalSimulationService;
 
-        /** Predict Tomorrow's Portfolio Prices **/
-        try {
-            for (String sym : strSymbols) {
-                Stock stock = stockHashMap.get(sym);
-                int stockDeltas = hashStockDeltas.get(sym);
-                double currentPrice = stock.getQuote().getPreviousClose().doubleValue();
-                double[] percentageChanges = PercentageChange.getArray(stock.getHistory());
-                for(int i = 0; i < percentageChanges.length; i++)
-                    tomorrowPortfolio[i] += (percentageChanges[i] + 1) * currentPrice * stockDeltas;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        // Compute VaR
-        Arrays.sort(tomorrowPortfolio);
-        double index = (1 - Confidence) * size;
-        double VaR = (currentPortfolio - tomorrowPortfolio[(int) index]) * TimeHorizon;
-        return VaR;
-    }
+	@PostMapping
+	public double getProducts(@RequestBody RequestHis request) {
+		double var = historicalSimulationService.getVar(request);
+		System.out.println("Var: " + var);
+		return var;
+	}
 }

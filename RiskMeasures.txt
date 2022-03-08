@@ -1,5 +1,0 @@
-Historical Simulation
-Analytical EW
-Analytical EWMA
-MonteCarlo EW
-MonteCarlo EWMA

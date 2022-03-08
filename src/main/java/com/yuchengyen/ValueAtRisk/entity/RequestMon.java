@@ -1,12 +1,30 @@
 package com.yuchengyen.ValueAtRisk.entity;
 
-public class RequestVar {
+public class RequestMon {
 
 	private String confidenceValue;
 	private String timeHorizonValue;
 	private String riskMeasureValue;
 	private String historicalYears;
+	private String steps;
+	private String paths;
 	private String symbol;
+
+	public String getSteps() {
+		return steps;
+	}
+
+	public void setSteps(String steps) {
+		this.steps = steps;
+	}
+
+	public String getPaths() {
+		return paths;
+	}
+
+	public void setPaths(String paths) {
+		this.paths = paths;
+	}
 
 	public String getConfidenceValue() {
 		return confidenceValue;

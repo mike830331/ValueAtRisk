@@ -1,6 +1,6 @@
 package com.yuchengyen.ValueAtRisk.entity;
 
-public class RequestVar {
+public class RequestHis {
 
 	private String confidenceValue;
 	private String timeHorizonValue;

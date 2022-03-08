@@ -22,28 +22,19 @@ public class StockData {
 	public static int countAsset;
 	public static int size;
 
-	public void getData(int historicalYears) {
-		strSymbols = readTxt("symbol.txt");
+	public void getData(int historicalYears, String symbols) {
+		String[] strSymbol = symbols.split(",");
+		strSymbols = strSymbol;
 		countAsset = strSymbols.length;
 		stockHashMap = getStock(historicalYears);
-		readDeltas();
+		for (String sym : strSymbols) {
+
+			hashStockDeltas.put(sym, 100);
+			hashOptionDeltas.put(sym, 0);
+		}
+
 		currentPortfolio = valuePortfolio();
 		size = getSize();
-	}
-
-	private static void readDeltas() {
-		for (String sym : strSymbols) {
-			StringBuilder stringBuilder = new StringBuilder();
-			String filename = stringBuilder.append("Deltas").append(File.separator).append(sym).append(".txt")
-					.toString();
-			String[] strDeltas = readTxt(filename);
-			try {
-				hashStockDeltas.put(sym, Integer.parseInt(strDeltas[0]));
-				hashOptionDeltas.put(sym, Integer.parseInt(strDeltas[1]));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 	private static HashMap<String, Stock> getStock(int historicalYears) {
@@ -89,22 +80,6 @@ public class StockData {
 			e.printStackTrace();
 		}
 		return size;
-	}
-
-	public static String[] readTxt(String filename) {
-		try {
-			Scanner inFile = new Scanner(new FileReader(filename));
-			ArrayList<String> stringArrayList = new ArrayList<>();
-			while (inFile.hasNextLine()) {
-				String strLine = inFile.nextLine();
-				stringArrayList.add(strLine);
-			}
-			String[] stringArray = stringArrayList.toArray(new String[stringArrayList.size()]);
-			return stringArray;
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 
 }

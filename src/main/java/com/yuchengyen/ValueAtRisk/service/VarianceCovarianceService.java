@@ -17,18 +17,11 @@ public class VarianceCovarianceService {
 
 	public String volatilityMeasure;
 
-//	public Analytical(String volatilityMeasure) {
-//		this.volatilityMeasure = volatilityMeasure;
-//	}
-
 	public double getVar(RequestVar request) throws IOException {
-//	public double getVar() throws IOException {
 
 		StockData data = new StockData();
-		data.getData(Integer.parseInt(request.getHistoricalYears()));
+		data.getData(Integer.parseInt(request.getHistoricalYears()), request.getSymbol());
 		String[] strSymbols = data.strSymbols;
-//		HashMap<String, String> hashParam = data.hashParam;
-//		String[] riskMeasures = data.riskMeasures;
 		String riskMeasureValue = request.getRiskMeasureValue();
 		HashMap<String, Stock> stockHashMap = data.stockHashMap;
 		HashMap<String, Integer> hashStockDeltas = data.hashStockDeltas;
@@ -48,27 +41,11 @@ public class VarianceCovarianceService {
 		double[] stockDelta = new double[countAsset];
 		double[][] matrixPcntChanges = new double[countAsset][size];
 
-		// test
-//		if (riskMeasureValue.equals("Historical Simulation"))
-//			volatilityMeasure = "Historical Simulation";
-//		System.out.println("Historical Simulation");
-
 		if (riskMeasureValue.equals("Analytical EW")) {
 			volatilityMeasure = "EW";
-			System.out.println("HAnalytical EW");
 		} else if (riskMeasureValue.equals("Analytical EWMA")) {
 			volatilityMeasure = "EWMA";
-			System.out.println("Analytical EWMA");
-		} else if (riskMeasureValue.equals("MonteCarlo EW")) {
-			volatilityMeasure = "EW";
-			System.out.println("MonteCarlo EW");
-		} else if (riskMeasureValue.equals("MonteCarlo EWMA")) {
-			volatilityMeasure = "EWMA";
-			System.out.println("MonteCarlo EWMA");
-		} else {
-			volatilityMeasure = "";
 		}
-		// test
 		try {
 			for (int i = 0; i < countAsset; i++) {
 				String sym = strSymbols[i];
